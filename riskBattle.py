@@ -37,9 +37,11 @@ def battle(attackers, defenders, attackerCutoff, attackDice, defenseDice, verbos
         return
     diceSides = 6
     roll = 0
-    delay = 0.1
+    delay = 0
     initialAttackers = attackers
     initialDefenders = defenders
+    attackersWin = 0
+    defendersWin = 0
     if verbose > 1:
         print "--- Attackers ---> Defenders --- {0} ---> {1} ---".format(attackers, defenders)
     while attackers > attackerCutoff and defenders > 0:
@@ -82,21 +84,31 @@ def battle(attackers, defenders, attackerCutoff, attackDice, defenseDice, verbos
         if verbose > 1:
             print "--- Attackers ---> Defenders --- {0} ---> {1} ---".format(attackers, defenders)
     
-    if verbose > 0:
-        if defenders == 0:
+    if defenders == 0:
+        attackersWin = 1
+        if verbose > 0:
             print "---------------------------------"
             print "- The attackers are victorious! -"
             print "---------------------------------"
-        else:
+    else:
+        defendersWin = 1
+        if verbose > 0:
             print "---------------------------------"
             print "- The defenders are victorious! -"
             print "---------------------------------"
 
+    if verbose > 0:
         print "Number of rolls: {0}".format(roll)
         print "Initial attackers: {0}, attackers destroyed: {1}, remaining attackers: {2}".format(initialAttackers, initialAttackers - attackers, attackers)
         print "Initial defenders: {0}, defenders destroyed: {1}, remaining defenders: {2}".format(initialDefenders, initialDefenders - defenders, defenders)
 
     results = {}
+    results["initial_attackers"] = initialAttackers
+    results["initial_defenders"] = initialDefenders
+    results["remaining_attackers"] = attackers
+    results["remaining_defenders"] = defenders
+    results["attackers_win"] = attackersWin
+    results["defenders_win"] = defendersWin
     return results
 
 if __name__ == "__main__":
