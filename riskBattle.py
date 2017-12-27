@@ -1,4 +1,4 @@
-import optparse
+#import optparse
 import random
 import time
 
@@ -100,20 +100,20 @@ def battle(attackers, defenders, attackerCutoff, attackDice, defenseDice, verbos
     return results
 
 if __name__ == "__main__":
-    parser = optparse.OptionParser("usage: %prog [options]\n")
-    parser.add_option("-s", "--simulation", dest='simulation', action='store_true', default=False, help="Run simulation of many battles.")
-    options, args = parser.parse_args()
-    if options.simulation:
-        print "Running simulation of many battles."
-    else:
-        print "Please input all values as integers."
-        verbose = input("Please input verbosity (0, 1, 2, 3): ")
-        attackers = input("Total number of attacking armies (must be greater than 1): ")
-        defenders = input("Total number of defending armies (must be greater than 0): ")
-        attackerCutoff = input("Continue attack if there are more than this cutoff (must be greater than 0): ")
-        attackDice = input("Number of attacking dice (1, 2, or 3): ")
-        defenseDice = input("Number of defending dice (1 or 2): ")
-        battle(attackers, defenders, attackerCutoff, attackDice, defenseDice, verbose)
+    #parser = optparse.OptionParser("usage: %prog [options]\n")
+    #parser.add_option("-s", "--simulation", dest='simulation', action='store_true', default=False, help="Run simulation of many battles.")
+    #options, args = parser.parse_args()
+    #if options.simulation:
+    #    print "Running simulation of many battles."
+    
+    print "Please input all values as integers."
+    verbose = input("Please input verbosity (0, 1, 2, 3): ")
+    attackers = input("Total number of attacking armies (must be greater than 1): ")
+    defenders = input("Total number of defending armies (must be greater than 0): ")
+    attackerCutoff = input("Continue attack if there are more than this cutoff (must be greater than 0): ")
+    attackDice = input("Number of attacking dice (1, 2, or 3): ")
+    defenseDice = input("Number of defending dice (1 or 2): ")
+    battle(attackers, defenders, attackerCutoff, attackDice, defenseDice, verbose)
 
 
 
