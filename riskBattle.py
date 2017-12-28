@@ -1,4 +1,3 @@
-#import optparse
 import random
 import time
 
@@ -102,22 +101,16 @@ def battle(attackers, defenders, attackerCutoff, attackDice, defenseDice, verbos
         print "Initial attackers: {0}, attackers destroyed: {1}, remaining attackers: {2}".format(initialAttackers, initialAttackers - attackers, attackers)
         print "Initial defenders: {0}, defenders destroyed: {1}, remaining defenders: {2}".format(initialDefenders, initialDefenders - defenders, defenders)
 
-    results = {}
-    results["initial_attackers"] = initialAttackers
-    results["initial_defenders"] = initialDefenders
-    results["remaining_attackers"] = attackers
-    results["remaining_defenders"] = defenders
-    results["attackers_win"] = attackersWin
-    results["defenders_win"] = defendersWin
-    return results
+    result = {}
+    result["initial_attackers"] = initialAttackers
+    result["initial_defenders"] = initialDefenders
+    result["remaining_attackers"] = attackers
+    result["remaining_defenders"] = defenders
+    result["attackers_win"] = attackersWin
+    result["defenders_win"] = defendersWin
+    return result
 
 if __name__ == "__main__":
-    #parser = optparse.OptionParser("usage: %prog [options]\n")
-    #parser.add_option("-s", "--simulation", dest='simulation', action='store_true', default=False, help="Run simulation of many battles.")
-    #options, args = parser.parse_args()
-    #if options.simulation:
-    #    print "Running simulation of many battles."
-    
     print "Please input all values as integers."
     verbose = input("Please input verbosity (0, 1, 2, 3): ")
     attackers = input("Total number of attacking armies (must be greater than 1): ")
