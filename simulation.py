@@ -1,6 +1,12 @@
 import optparse
+import numpy as np
 from riskBattle import battle
 import matplotlib.pyplot as plt
+
+def statLocation(x_min, x_max, y_min, y_max):
+    x_stat = x_min + (x_max - x_min) / 8.0
+    y_stat = y_max - (y_max - y_min) / 5.0
+    return x_stat, y_stat
 
 def simulation(maxArmies, iterations, diceSides):
     attackerCutoff = 1
@@ -36,14 +42,40 @@ def simulation(maxArmies, iterations, diceSides):
     remains_x = []
     remains_y = []
     remains_weight = []
+    zeroWins_x = []
+    zeroWins_y = []
+    zeroRemains_x = []
+    zeroRemains_y = []
+    sumWins = 0
+    sumRemains = 0
     for result in resultList:
-        wins_x.append(result["initial_defenders"])
-        wins_y.append(result["initial_attackers"])
-        wins_weight.append(result["attackers_win"] - result["defenders_win"])
-        remains_x.append(result["initial_defenders"])
-        remains_y.append(result["initial_attackers"])
-        remains_weight.append( float(result["remaining_attackers"] - result["remaining_defenders"]) / float(iterations) )
-    
+        iteration = result["iteration"]
+        x = result["initial_defenders"]
+        y = result["initial_attackers"]
+        wins = result["attackers_win"] - result["defenders_win"]
+        remains = float(result["remaining_attackers"] - result["remaining_defenders"]) / float(iterations)
+        sumWins += wins
+        sumRemains += remains
+        
+        if iteration == iterations:
+            if sumWins == 0:
+                zeroWins_x.append(x)
+                zeroWins_y.append(y)
+            if sumRemains == 0:
+                zeroRemains_x.append(x)
+                zeroRemains_y.append(y)
+            sumWins = 0
+            sumRemains = 0
+
+        wins_x.append(x)
+        wins_y.append(y)
+        wins_weight.append(wins)
+        
+        remains_x.append(x)
+        remains_y.append(y)
+        remains_weight.append(remains)
+
+    # Histograms
     plt.hist2d(wins_x, wins_y, weights=wins_weight, bins=bin_edges)
     plt.colorbar()
     
@@ -63,6 +95,37 @@ def simulation(maxArmies, iterations, diceSides):
     file_name = "netRemains_d%d_max%d_iterations%d" % (diceSides, maxArmies, iterations)
     file_name = dir_name + file_name
     plt.title("Average Net Remaining Armies for Attacker (Positive) and\nDefender (Negative) using {0}-sided Dice".format(diceSides))
+    plt.xlabel("Initial Number of Defending Armies")
+    plt.ylabel("Initial Number of Attacking Armies")
+    plt.savefig("%s.pdf" % file_name)
+    plt.savefig("%s.png" % file_name)
+    plt.clf()
+
+    topRight = maxArmies + 5
+
+    # Linear Fit for Zero Wins
+    z = np.polyfit(zeroWins_x, zeroWins_y, 1)
+    f = np.poly1d(z)
+    f_string = str(f)
+    f_string = f_string.split("\n")[-1]
+    f_string = "f(x) = {0}".format(f_string)
+    print "Fit for zero wins: {0}".format(f_string)
+    # calculate new x's and y's using fit function
+    x_new = np.linspace(0, topRight, 100)
+    y_new = f(x_new)
+    x_stat, y_stat = statLocation(0, topRight, 0, topRight)
+    # Scatter Plots
+    plt.plot(zeroWins_x, zeroWins_y, 'o',  c="xkcd:cerulean",    alpha=0.8)
+    plt.plot(x_new, y_new,           '--', c="xkcd:kelly green", alpha=0.8)
+    plt.text(x_stat, y_stat, f_string)
+    
+    axes = plt.gca()
+    axes.set_xlim([0, topRight])
+    axes.set_ylim([0, topRight])
+
+    file_name = "zeroWins_d%d_max%d_iterations%d" % (diceSides, maxArmies, iterations)
+    file_name = dir_name + file_name
+    plt.title("Zero Net Wins for Attacker (Positive) and\nDefender (Negative) using {0}-sided Dice".format(diceSides))
     plt.xlabel("Initial Number of Defending Armies")
     plt.ylabel("Initial Number of Attacking Armies")
     plt.savefig("%s.pdf" % file_name)
