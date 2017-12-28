@@ -8,7 +8,7 @@ Automate risk battles.
 
 ## Run
 
-For normal battles, use `riskBattle.py`.
+For normal Risk battles with user input, use `riskBattle.py`.
 ```
 python riskBattle.py
 ```
