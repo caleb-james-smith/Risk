@@ -50,7 +50,7 @@ def simulation(maxArmies, iterations, diceSides):
     dir_name = "plots/"
     file_name = "netWins_d%d_max%d_iterations%d" % (diceSides, maxArmies, iterations)
     file_name = dir_name + file_name
-    plt.title("Net Wins for Attacker (Positive) and Defender (Negative)")
+    plt.title("Net Wins for Attacker (Positive) and\nDefender (Negative) using {0}-sided Dice".format(diceSides))
     plt.xlabel("Initial Number of Defending Armies")
     plt.ylabel("Initial Number of Attacking Armies")
     plt.savefig("%s.pdf" % file_name)
@@ -62,7 +62,7 @@ def simulation(maxArmies, iterations, diceSides):
 
     file_name = "netRemains_d%d_max%d_iterations%d" % (diceSides, maxArmies, iterations)
     file_name = dir_name + file_name
-    plt.title("Average Net Remaining Armies for\nAttacker (Positive) and Defender (Negative)")
+    plt.title("Average Net Remaining Armies for Attacker (Positive) and\nDefender (Negative) using {0}-sided Dice".format(diceSides))
     plt.xlabel("Initial Number of Defending Armies")
     plt.ylabel("Initial Number of Attacking Armies")
     plt.savefig("%s.pdf" % file_name)
