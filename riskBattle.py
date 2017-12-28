@@ -18,7 +18,7 @@ import time
 # verbose == 2: print results and army amounts
 # verbose >= 3: print results, army amounts, and rolls
 
-def battle(attackers, defenders, attackerCutoff, attackDice, defenseDice, verbose=3):
+def battle(attackers, defenders, attackerCutoff, attackDice, defenseDice, diceSides, verbose=3):
     if not attackers > 1:
         print "The total number of attackers must be greater than 1."
         return
@@ -34,7 +34,6 @@ def battle(attackers, defenders, attackerCutoff, attackDice, defenseDice, verbos
     if not defenseDice in [1,2]:
         print "The defender must roll 1 or 2 dice."
         return
-    diceSides = 6
     roll = 0
     delay = 0
     initialAttackers = attackers
@@ -118,7 +117,8 @@ if __name__ == "__main__":
     attackerCutoff = input("Continue attack if there are more than this cutoff (must be greater than 0): ")
     attackDice = input("Number of attacking dice (1, 2, or 3): ")
     defenseDice = input("Number of defending dice (1 or 2): ")
-    battle(attackers, defenders, attackerCutoff, attackDice, defenseDice, verbose)
+    diceSides = 6
+    battle(attackers, defenders, attackerCutoff, attackDice, defenseDice, diceSides, verbose)
 
 
 
