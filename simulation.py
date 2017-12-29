@@ -1,28 +1,40 @@
 import optparse
+import time
+from datetime import timedelta
 import numpy as np
-from riskBattle import battle
 import matplotlib.pyplot as plt
+from riskBattle import battle
 
 def statLocation(x_min, x_max, y_min, y_max):
     x_stat = x_min + (x_max - x_min) / 8.0
     y_stat = y_max - (y_max - y_min) / 5.0
     return x_stat, y_stat
 
+def log(t0, message):
+    t1 = time.time()
+    dt = str(timedelta(seconds=t1-t0))
+    print "{0}\t{1}".format(dt, message)
+
 def simulation(maxArmies, iterations, diceSides):
+    t0 = time.time()
     attackerCutoff = 1
     attackDice = 3
     defenseDice = 2
     verbose = 0
+    counter = 0
     resultList = []
     attackerList = list(i for i in xrange(2, maxArmies + 2))
     defenderList = list(i for i in xrange(1, maxArmies + 1))
     for attackers in attackerList:
         for defenders in defenderList:
             for iteration in xrange(1, iterations + 1):
+                if counter % 10000 == 0:
+                    log(t0, "Executing battle {0}".format(counter))
                 result = battle(attackers, defenders, attackerCutoff, attackDice, defenseDice, diceSides, verbose)
                 result["iteration"] = iteration
                 #print result
                 resultList.append(result)
+                counter += 1
 
     number_battles = len(resultList)
     print "Number of battles in simulation: {0}".format(number_battles)
@@ -48,6 +60,7 @@ def simulation(maxArmies, iterations, diceSides):
     zeroRemains_y = []
     sumWins = 0
     sumRemains = 0
+    log(t0, "Calculating net wins and net remaining armies.")
     for result in resultList:
         iteration = result["iteration"]
         x = result["initial_defenders"]
@@ -74,6 +87,8 @@ def simulation(maxArmies, iterations, diceSides):
         remains_x.append(x)
         remains_y.append(y)
         remains_weight.append(remains)
+
+    log(t0, "Creating plots.")
 
     # Histograms
     plt.hist2d(wins_x, wins_y, weights=wins_weight, bins=bin_edges)
